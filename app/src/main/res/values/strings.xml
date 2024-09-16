@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">TP3_GRUPO2</string>
+    <string name="main_header">Parking control</string>
+    <string name="main_title">Bienvenido a parking system</string>
+    <string name="main_subtitle">Inicia sesión para empezar</string>
+    <string name="main_et_username">Nombre de usuario</string>
+    <string name="main_et_password">Contraseña</string>
+    <string name="main_btn_login">INICIAR SESIÓN</string>
+    <string name="main_btn_register">Registrarse</string>
 </resources>
