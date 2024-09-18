@@ -111,7 +111,9 @@
         android:foreground="?attr/selectableItemBackground"
         android:text="@string/main_btn_register"
         android:textColor="#2196F3"
+        android:onClick="redireccionRegistrarse"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_login" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_login"
+        tools:ignore="UsingOnClickInXml" />
 </androidx.constraintlayout.widget.ConstraintLayout>
