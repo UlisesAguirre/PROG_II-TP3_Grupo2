@@ -1,6 +1,7 @@
 package openHelper;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -32,5 +33,20 @@ public class SQLite_OpenHelper extends SQLiteOpenHelper {
         this.close();
     }
 
+
+    public boolean validarUsuario(String username, String contrasena) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT COUNT(*) FROM Usuarios WHERE Nombre = ? AND Contrasena = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{username, contrasena});
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+            int count = cursor.getInt(0);
+            cursor.close();
+            return count > 0;
+        }
+
+        return false;
+    }
 
 }

@@ -14,4 +14,13 @@
     <string name="contrasena">Contraseña</string>
     <string name="repetir_contrasena">Repetir Contraseña</string>
     <string name="aceptar">ACEPTAR</string>
+    <string name="title_activity_panel">PanelActivity</string>
+    <string name="navigation_drawer_open">Abrir la navegacion</string>
+    <string name="navigation_drawer_close">Cerrar la navegacion</string>
+    <string name="nav_header_title">Nombre del usuario</string>
+    <string name="nav_header_subtitle">correo@correo.com</string>
+    <string name="nav_header_desc">Nav</string>
+    <string name="action_settings">Ajustes</string>
+
+    <string name="menu_home">Parking control</string>
 </resources>
