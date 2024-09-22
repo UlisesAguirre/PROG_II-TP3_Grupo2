@@ -1,36 +1,40 @@
 package com.example.tp3_grupo2;
 
+import android.annotation.SuppressLint;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
+import android.app.AlertDialog;
+import android.view.LayoutInflater;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
-import androidx.lifecycle.ViewModelProvider;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tp3_grupo2.databinding.ActivityPanelBinding;
-import android.app.AlertDialog;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-
-import com.example.tp3_grupo2.profile.ProfileViewModel;
-
+import openHelper.SQLite_OpenHelper;
+import entidades.Parqueo;
 
 public class PanelActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityPanelBinding binding;
-    private ProfileViewModel profileViewModel;
+    SQLite_OpenHelper conn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,20 +52,18 @@ public class PanelActivity extends AppCompatActivity {
         });
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home)
+        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_home)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_panel);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        conn=new SQLite_OpenHelper(this,"BD_Tp3",null,1);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.panel, menu);
         return true;
     }
@@ -84,14 +86,13 @@ public class PanelActivity extends AppCompatActivity {
         final EditText timeInput = dialogView.findViewById(R.id.edit_text_time);
         Button cancelButton = dialogView.findViewById(R.id.button_cancel);
         Button registerButton = dialogView.findViewById(R.id.button_register);
+        String usuario = "1";
 
         final AlertDialog alertDialog = dialogBuilder.create();
 
-        // botones
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 alertDialog.dismiss();
             }
         });
@@ -99,13 +100,52 @@ public class PanelActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Validaciones
                 if (plateNumberInput.getText().toString().isEmpty() || timeInput.getText().toString().isEmpty()) {
                     Snackbar.make(v, "Por favor complete todos los campos", Snackbar.LENGTH_LONG)
                             .setAction("Action", null)
                             .show();
                 } else {
-                    //la lógica para registrar el parqueo <-----------------
+                    Parqueo pr = new Parqueo();
+                    pr.setMatricula(plateNumberInput.getText().toString());
+                    pr.setTiempo(Integer.parseInt(timeInput.getText().toString()));
+                    pr.setUsuarioId(Integer.parseInt(usuario));
+
+                    //conn.abrir();
+                    ContentValues valores = new ContentValues();
+                    valores.put("Matricula", pr.getMatricula());
+                    valores.put("Tiempo", pr.getTiempo());
+                    valores.put("UsuarioId", pr.getUsuarioId());
+
+                    conn.abrir();
+                    SQLiteDatabase db = conn.getWritableDatabase();
+                    if (db != null) {
+                        long result = db.insert("Parqueos", null, valores);
+                        if (result == -1) {
+                            Log.e("Database", "Error al insertar datos");
+                            Snackbar.make(v, "Error al crear el parqueo", Snackbar.LENGTH_LONG).show();
+                        } else {
+                            Snackbar.make(v, "Parqueo creado con éxito!", Snackbar.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Log.e("Database", "No se pudo abrir la base de datos para escritura.");
+                    }
+
+                    Cursor cursor = conn.obtenerTodosLosParqueos();
+                    if (cursor.moveToFirst()) {
+                        do {
+                            @SuppressLint("Range") String matricula = cursor.getString(cursor.getColumnIndex("Matricula"));
+                            @SuppressLint("Range") int tiempo = cursor.getInt(cursor.getColumnIndex("Tiempo"));
+                            @SuppressLint("Range") int usuarioId = cursor.getInt(cursor.getColumnIndex("UsuarioId"));
+                            Log.d("Database", "Parqueo: " + matricula + ", Tiempo: " + tiempo + ", UsuarioId: " + usuarioId);
+                        } while (cursor.moveToNext());
+                    }
+                    cursor.close();
+                    conn.cerrar();
+
+
+                    Snackbar.make(v, "Parqueo creado con exito!", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null)
+                            .show();
                     alertDialog.dismiss();
                 }
             }

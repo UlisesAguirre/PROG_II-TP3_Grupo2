@@ -18,6 +18,7 @@
             android:background="#FF1A1A"
             app:popupTheme="@style/Theme.TP3_GRUPO2.PopupOverlay" />
 
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <include layout="@layout/content_panel" />
@@ -29,6 +30,7 @@
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="16dp"
+        android:contentDescription="TODO"
         app:srcCompat="@drawable/ic_add" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

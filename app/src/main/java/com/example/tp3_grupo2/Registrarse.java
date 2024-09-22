@@ -30,34 +30,39 @@ public class Registrarse extends AppCompatActivity {
 
     }
 
-    public void Registrar(View view){
+    public void Registrar(View view) {
+        // Verificar si las contraseñas coinciden
+        String contrasena1 = et_contrasena.getText().toString();
+        String contrasena2 = et_contrasena2.getText().toString();
+        String nombre = et_nombre.getText().toString();
+        String correo = et_correo.getText().toString();
 
-        //Verificar si las contraseñas coinciden
-        String contrasena1=et_contrasena.getText().toString();
-        String contrasena2=et_contrasena2.getText().toString();
+        if (contrasena1.isEmpty() || contrasena2.isEmpty() || nombre.isEmpty() || correo.isEmpty()) {
+            Toast.makeText(this, "Por favor ingrese datos válidos", Toast.LENGTH_SHORT).show();
+        } else {
+            if (!correo.contains("@") || !correo.endsWith(".com")) {
+                Toast.makeText(this, "Ingrese un correo electrónico válido", Toast.LENGTH_SHORT).show();
+            } else if (contrasena2.equals(contrasena1)) {
+                // Creamos objeto con la info ingresada
+                Usuario us = new Usuario();
+                us.setNombre(nombre);
+                us.setCorreo(correo);
+                us.setContrasena(contrasena1);
 
-        if(contrasena2.equals(contrasena1)){
-            //Creamos objeto con la info ingresada
+                // Lo registramos en la tabla Usuarios
+                altaUsuario(us);
+                Toast.makeText(this, "Registrado con Éxito", Toast.LENGTH_SHORT).show();
 
-            Usuario us=new Usuario();
-            us.setNombre(et_nombre.getText().toString());
-            us.setCorreo(et_correo.getText().toString());
-            us.setContrasena(contrasena1);
+                // Vaciamos los controles una vez registrado
+                et_nombre.setText("");
+                et_correo.setText("");
+                et_contrasena.setText("");
+                et_contrasena2.setText("");
 
-            //Lo registramos en la tabla Usuarios
-            altaUsuario(us);
-            Toast.makeText(this,"Registrado con Exito",Toast.LENGTH_SHORT).show();
-
-            //Vaciamos los controles una vez registrado
-            et_nombre.setText("");
-            et_correo.setText("");
-            et_contrasena.setText("");
-            et_contrasena2.setText("");
-
-        }else{
-            Toast.makeText(this,"No coinciden las contrasenas",Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "No coinciden las contraseñas", Toast.LENGTH_SHORT).show();
+            }
         }
-
     }
 
     public void altaUsuario(Usuario us){

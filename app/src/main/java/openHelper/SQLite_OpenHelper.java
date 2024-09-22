@@ -63,4 +63,16 @@ public class SQLite_OpenHelper extends SQLiteOpenHelper {
         return db.rawQuery(query, new String[]{username, contrasena});
     }
 
+    public Cursor obtenerTodosLosParqueos() {
+        abrirLectura();
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM Parqueos", null);
+    }
+
+    public Cursor obtenerParqueosUsuario(String userId) {
+        abrirLectura();  // Abrir en modo lectura
+        SQLiteDatabase db = this.getReadableDatabase();  // Obtener base de datos de solo lectura
+        String query = "SELECT Matricula, Tiempo FROM Parqueos WHERE UsuarioId = ?";
+        return db.rawQuery(query, new String[]{userId});
+    }
 }
