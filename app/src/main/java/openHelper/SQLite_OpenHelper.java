@@ -17,7 +17,12 @@ public class SQLite_OpenHelper extends SQLiteOpenHelper {
         String queryUsuarios="create table Usuarios(Id integer primary key autoincrement," +
                 "Nombre text, Correo text, Contrasena text);";
 
+        String queryParqueos = "CREATE TABLE Parqueos(Id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "Matricula TEXT, Tiempo INTEGER, UsuarioId INTEGER, " +
+                "FOREIGN KEY(UsuarioId) REFERENCES Usuarios(Id));";
+
         sqLiteDatabase.execSQL(queryUsuarios);
+        sqLiteDatabase.execSQL(queryParqueos);
     }
 
     @Override
@@ -28,6 +33,8 @@ public class SQLite_OpenHelper extends SQLiteOpenHelper {
     public void abrir(){
         this.getWritableDatabase();
     }
+
+    public void abrirLectura() { this.getReadableDatabase(); }
 
     public void cerrar(){
         this.close();
@@ -47,6 +54,13 @@ public class SQLite_OpenHelper extends SQLiteOpenHelper {
         }
 
         return false;
+    }
+
+    public Cursor obtenerDatosUsuario(String username, String contrasena) {
+        abrirLectura();  // Abrir en modo lectura
+        SQLiteDatabase db = this.getReadableDatabase();  // Obtener base de datos de solo lectura
+        String query = "SELECT Nombre, Correo, Contrasena FROM Usuarios WHERE Nombre = ? AND Contrasena = ?";
+        return db.rawQuery(query, new String[]{username, contrasena});
     }
 
 }
