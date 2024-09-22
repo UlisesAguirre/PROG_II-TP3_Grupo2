@@ -10,5 +10,9 @@
         android:name="com.example.tp3_grupo2.ui.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
-
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="com.example.tp3_grupo2.profile.ProfileFragment"
+        android:label="@string/perfil_header"
+        tools:layout="@layout/fragment_profile" />
 </navigation>

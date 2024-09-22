@@ -21,6 +21,8 @@
     <string name="nav_header_subtitle">correo@correo.com</string>
     <string name="nav_header_desc">Nav</string>
     <string name="action_settings">Ajustes</string>
+    <string name="perfil_header">Perfil</string>
+
 
     <string name="menu_home">Parking control</string>
 </resources>
