@@ -28,6 +28,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.tp3_grupo2.databinding.ActivityPanelBinding;
+
+import entidades.Usuario;
 import openHelper.SQLite_OpenHelper;
 import entidades.Parqueo;
 
@@ -36,6 +38,7 @@ public class PanelActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityPanelBinding binding;
     SQLite_OpenHelper conn;
+    Usuario usuarioLogueado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +68,11 @@ public class PanelActivity extends AppCompatActivity {
         //PRUEBA DE QUE ANDA SHAREDPREFERENCES
 
         SharedPreferences preferencias = getSharedPreferences("usuarioLogueado", MODE_PRIVATE);
-        String usuarioLogueado = preferencias.getString("usuario", "[]");
+        usuarioLogueado=new Usuario();
+        usuarioLogueado.setId(Integer.parseInt(preferencias.getString("Id", "0")));
+        usuarioLogueado.setNombre(preferencias.getString("Nombre", " "));
+        usuarioLogueado.setCorreo(preferencias.getString("Correo", " "));
+        usuarioLogueado.setContrasena(preferencias.getString("Contrasena", " "));
 
     }
 
