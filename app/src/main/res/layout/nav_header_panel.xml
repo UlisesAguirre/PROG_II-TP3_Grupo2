@@ -16,7 +16,7 @@
     <ImageView
         android:id="@+id/user_icon"
         android:layout_width="98dp"
-        android:layout_height="88dp"
+        android:layout_height="60dp"
         android:layout_gravity="center|start"
         android:contentDescription="User Icon"
         android:src="@drawable/person_pin" />
