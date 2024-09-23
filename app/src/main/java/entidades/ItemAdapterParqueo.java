@@ -48,7 +48,7 @@ public class ItemAdapterParqueo extends BaseAdapter {
         Parqueo item = items.get(position);
 
         txtMatricula.setText(item.getMatricula());
-        txtTiempo.setText(item.getTiempo());
+        txtTiempo.setText(Integer.toString(item.getTiempo()));
 
         return convertView;
     }

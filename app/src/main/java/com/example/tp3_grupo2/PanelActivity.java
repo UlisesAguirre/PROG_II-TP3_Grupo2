@@ -47,7 +47,7 @@ public class PanelActivity extends AppCompatActivity {
     Usuario usuarioLogueado;
     private View navHeaderPanel;
     private TextView userNameTextView, userEmailTextView;
-    GridView gridView_Parkeos;
+    Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,7 +133,7 @@ public class PanelActivity extends AppCompatActivity {
         gridView_Parkeos.setAdapter(adapter);*/
 
         NavController navController2 = Navigation.findNavController(this, R.id.nav_host_fragment_content_panel);
-        Bundle bundle = new Bundle();
+        bundle = new Bundle();
         bundle.putSerializable("parqueos", parqueosList);
         navController2.navigate(R.id.nav_home, bundle);
     }
@@ -162,7 +162,7 @@ public class PanelActivity extends AppCompatActivity {
         final EditText timeInput = dialogView.findViewById(R.id.edit_text_time);
         Button cancelButton = dialogView.findViewById(R.id.button_cancel);
         Button registerButton = dialogView.findViewById(R.id.button_register);
-        String usuario = "1";
+        String usuario = Integer.toString(usuarioLogueado.getId());
 
         final AlertDialog alertDialog = dialogBuilder.create();
 
@@ -222,7 +222,13 @@ public class PanelActivity extends AppCompatActivity {
                             .show();
                     alertDialog.dismiss();
                 }
+                ArrayList<Parqueo> parqueosListActual=conn.obtenerParqueosPorUsuario(usuarioLogueado);
+                NavController navController3 = Navigation.findNavController(PanelActivity.this, R.id.nav_host_fragment_content_panel);
+
+                bundle.putSerializable("parqueos", parqueosListActual);
+                navController3.navigate(R.id.nav_home, bundle);
             }
+
         });
 
         alertDialog.show();
