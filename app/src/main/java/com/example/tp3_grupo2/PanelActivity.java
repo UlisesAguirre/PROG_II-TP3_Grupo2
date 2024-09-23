@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.TextView;
 import android.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -31,6 +32,9 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.tp3_grupo2.databinding.ActivityPanelBinding;
 
+import java.util.ArrayList;
+
+import entidades.ItemAdapterParqueo;
 import entidades.Usuario;
 import openHelper.SQLite_OpenHelper;
 import entidades.Parqueo;
@@ -43,6 +47,7 @@ public class PanelActivity extends AppCompatActivity {
     Usuario usuarioLogueado;
     private View navHeaderPanel;
     private TextView userNameTextView, userEmailTextView;
+    Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +69,9 @@ public class PanelActivity extends AppCompatActivity {
         mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_home)
                 .setOpenableLayout(drawer)
                 .build();
+
+
+
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_panel);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
@@ -106,6 +114,28 @@ public class PanelActivity extends AppCompatActivity {
         // Setear el nombre y el correo en el panel lateral
         userNameTextView.setText(usuarioLogueado.getNombre());
         userEmailTextView.setText(usuarioLogueado.getCorreo());
+
+        ArrayList<Parqueo> parqueosList=conn.obtenerParqueosPorUsuario(usuarioLogueado);
+        /*gridView_Parkeos=(GridView) findViewById(R.id.parqueos);
+
+
+
+
+        for (Parqueo parqueo : parqueosList) {
+
+            System.out.println("ID: " + parqueo.getId() +
+                    ", Matricula: " + parqueo.getMatricula() +
+                    ", Tiempo: " + parqueo.getTiempo() +
+                    ", Usuario ID: " + parqueo.getUsuarioId());
+        }
+
+        ItemAdapterParqueo adapter = new ItemAdapterParqueo(this, parqueosList);
+        gridView_Parkeos.setAdapter(adapter);*/
+
+        NavController navController2 = Navigation.findNavController(this, R.id.nav_host_fragment_content_panel);
+        bundle = new Bundle();
+        bundle.putSerializable("parqueos", parqueosList);
+        navController2.navigate(R.id.nav_home, bundle);
     }
 
     @Override
@@ -132,7 +162,7 @@ public class PanelActivity extends AppCompatActivity {
         final EditText timeInput = dialogView.findViewById(R.id.edit_text_time);
         Button cancelButton = dialogView.findViewById(R.id.button_cancel);
         Button registerButton = dialogView.findViewById(R.id.button_register);
-        String usuario = "1";
+        String usuario = Integer.toString(usuarioLogueado.getId());
 
         final AlertDialog alertDialog = dialogBuilder.create();
 
@@ -192,7 +222,13 @@ public class PanelActivity extends AppCompatActivity {
                             .show();
                     alertDialog.dismiss();
                 }
+                ArrayList<Parqueo> parqueosListActual=conn.obtenerParqueosPorUsuario(usuarioLogueado);
+                NavController navController3 = Navigation.findNavController(PanelActivity.this, R.id.nav_host_fragment_content_panel);
+
+                bundle.putSerializable("parqueos", parqueosListActual);
+                navController3.navigate(R.id.nav_home, bundle);
             }
+
         });
 
         alertDialog.show();

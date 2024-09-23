@@ -1,6 +1,8 @@
 package entidades;
 
-public class Parqueo {
+import java.io.Serializable;
+
+public class Parqueo implements Serializable {
     private int id;
     private String matricula;
     private int tiempo;
@@ -47,5 +49,16 @@ public class Parqueo {
 
     public void setUsuarioId(int usuarioId) {
         this.usuarioId = usuarioId;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Parqueo{" +
+                "id=" + id +
+                ", matricula='" + matricula + '\'' +
+                ", tiempo=" + tiempo +
+                ", usuarioId=" + usuarioId +
+                '}';
     }
 }
