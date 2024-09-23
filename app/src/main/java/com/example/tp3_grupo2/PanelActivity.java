@@ -69,6 +69,9 @@ public class PanelActivity extends AppCompatActivity {
         mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_home)
                 .setOpenableLayout(drawer)
                 .build();
+
+
+
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_panel);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
@@ -112,21 +115,27 @@ public class PanelActivity extends AppCompatActivity {
         userNameTextView.setText(usuarioLogueado.getNombre());
         userEmailTextView.setText(usuarioLogueado.getCorreo());
 
-        gridView_Parkeos=(GridView) findViewById(R.id.parkeos);
-
         ArrayList<Parqueo> parqueosList=conn.obtenerParqueosPorUsuario(usuarioLogueado);
+        /*gridView_Parkeos=(GridView) findViewById(R.id.parqueos);
 
 
-        /*for (Parqueo parqueo : parqueosList) {
+
+
+        for (Parqueo parqueo : parqueosList) {
 
             System.out.println("ID: " + parqueo.getId() +
                     ", Matricula: " + parqueo.getMatricula() +
                     ", Tiempo: " + parqueo.getTiempo() +
                     ", Usuario ID: " + parqueo.getUsuarioId());
-        }*/
+        }
 
         ItemAdapterParqueo adapter = new ItemAdapterParqueo(this, parqueosList);
-        gridView_Parkeos.setAdapter(adapter);
+        gridView_Parkeos.setAdapter(adapter);*/
+
+        NavController navController2 = Navigation.findNavController(this, R.id.nav_host_fragment_content_panel);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("parqueos", parqueosList);
+        navController2.navigate(R.id.nav_home, bundle);
     }
 
     @Override

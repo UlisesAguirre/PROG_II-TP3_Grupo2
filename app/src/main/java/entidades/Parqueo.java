@@ -1,6 +1,8 @@
 package entidades;
 
-public class Parqueo {
+import java.io.Serializable;
+
+public class Parqueo implements Serializable {
     private int id;
     private String matricula;
     private int tiempo;
