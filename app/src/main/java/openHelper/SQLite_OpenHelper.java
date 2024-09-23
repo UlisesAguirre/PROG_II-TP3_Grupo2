@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+import entidades.Usuario;
+
 public class SQLite_OpenHelper extends SQLiteOpenHelper {
     public SQLite_OpenHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -56,12 +58,29 @@ public class SQLite_OpenHelper extends SQLiteOpenHelper {
         return false;
     }
 
-    public Cursor obtenerDatosUsuario(String username, String contrasena) {
-        abrirLectura();  // Abrir en modo lectura
-        SQLiteDatabase db = this.getReadableDatabase();  // Obtener base de datos de solo lectura
-        String query = "SELECT Nombre, Correo, Contrasena FROM Usuarios WHERE Nombre = ? AND Contrasena = ?";
-        return db.rawQuery(query, new String[]{username, contrasena});
+    public Usuario obtenerUsuario(String username, String contrasena) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT Id,Nombre,Correo,Contrasena FROM Usuarios WHERE Nombre = ? AND Contrasena = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{username, contrasena});
+
+
+        if (cursor != null && cursor.moveToFirst()) {
+            Usuario us=new Usuario();
+            us.setId(cursor.getInt(cursor.getColumnIndexOrThrow("Id")));
+            us.setNombre(cursor.getString(cursor.getColumnIndexOrThrow("Nombre")));
+            us.setCorreo(cursor.getString(cursor.getColumnIndexOrThrow("Correo")));
+            us.setContrasena(cursor.getString(cursor.getColumnIndexOrThrow("Contrasena")));
+
+            System.out.println(us.toString());
+
+            return us;
+        }
+
+        return null;
     }
+
+
+
 
     public Cursor obtenerTodosLosParqueos() {
         abrirLectura();
