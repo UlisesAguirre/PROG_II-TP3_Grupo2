@@ -2,25 +2,26 @@ package com.example.tp3_grupo2;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.view.Menu;
-import android.widget.ArrayAdapter;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.app.AlertDialog;
 import android.view.LayoutInflater;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.annotation.NonNull;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -57,6 +58,7 @@ public class PanelActivity extends AppCompatActivity {
                 mostrarParkingModal();
             }
         });
+
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
         mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_home)
@@ -66,23 +68,42 @@ public class PanelActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        conn=new SQLite_OpenHelper(this,"BD_Tp3",null,1);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                int id = menuItem.getItemId();
+                NavController navController = Navigation.findNavController(PanelActivity.this, R.id.nav_host_fragment_content_panel);
+                DrawerLayout drawer = binding.drawerLayout; // Obtén la referencia al DrawerLayout
 
-        //PRUEBA DE QUE ANDA SHAREDPREFERENCES
+                if (id == R.id.nav_home) {
+                    navController.navigate(R.id.nav_home); // Navegar al HomeFragment
+                } else if (id == R.id.nav_profile) {
+                    navController.navigate(R.id.nav_profile); // Navegar al ProfileFragment
+                } else if (id == R.id.nav_logout) {
+                    cerrarSesion();
+                }
 
+                drawer.closeDrawer(GravityCompat.START); // Cierra el menú lateral
+                return true;
+            }
+        });
+
+        conn = new SQLite_OpenHelper(this, "BD_Tp3", null, 1);
+
+        // Cargar datos del usuario desde SharedPreferences
         SharedPreferences preferencias = getSharedPreferences("usuarioLogueado", MODE_PRIVATE);
-        usuarioLogueado=new Usuario();
+        usuarioLogueado = new Usuario();
         usuarioLogueado.setId(Integer.parseInt(preferencias.getString("ID", "0")));
         usuarioLogueado.setNombre(preferencias.getString("Nombre", " "));
         usuarioLogueado.setCorreo(preferencias.getString("Correo", " "));
         usuarioLogueado.setContrasena(preferencias.getString("Contrasena", " "));
 
-        // referencia a los TextViews del panel lateral
+        // Referencia a los TextViews del panel lateral
         navHeaderPanel = navigationView.getHeaderView(0);
         userNameTextView = navHeaderPanel.findViewById(R.id.user_name);
         userEmailTextView = navHeaderPanel.findViewById(R.id.user_email);
 
-        // setear el nombre y el correo en el panel lateral
+        // Setear el nombre y el correo en el panel lateral
         userNameTextView.setText(usuarioLogueado.getNombre());
         userEmailTextView.setText(usuarioLogueado.getCorreo());
     }
@@ -135,7 +156,6 @@ public class PanelActivity extends AppCompatActivity {
                     pr.setTiempo(Integer.parseInt(timeInput.getText().toString()));
                     pr.setUsuarioId(Integer.parseInt(usuario));
 
-                    //conn.abrir();
                     ContentValues valores = new ContentValues();
                     valores.put("Matricula", pr.getMatricula());
                     valores.put("Tiempo", pr.getTiempo());
@@ -167,8 +187,7 @@ public class PanelActivity extends AppCompatActivity {
                     cursor.close();
                     conn.cerrar();
 
-
-                    Snackbar.make(v, "Parqueo creado con exito!", Snackbar.LENGTH_LONG)
+                    Snackbar.make(v, "Parqueo creado con éxito!", Snackbar.LENGTH_LONG)
                             .setAction("Action", null)
                             .show();
                     alertDialog.dismiss();
@@ -177,5 +196,18 @@ public class PanelActivity extends AppCompatActivity {
         });
 
         alertDialog.show();
+    }
+
+    private void cerrarSesion() {
+        // Limpiar SharedPreferences
+        SharedPreferences preferencias = getSharedPreferences("usuarioLogueado", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferencias.edit();
+        editor.clear(); // Limpia todas las preferencias
+        editor.apply();
+
+        // Redirigir a la actividad de inicio de sesión
+        Intent intent = new Intent(this, MainActivity.class); // Cambia LoginActivity por el nombre de tu actividad de inicio de sesión
+        startActivity(intent);
+        finish(); // Opcional: cierra la actividad actual
     }
 }
