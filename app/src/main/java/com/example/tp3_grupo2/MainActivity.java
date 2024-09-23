@@ -1,6 +1,8 @@
 package com.example.tp3_grupo2;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +15,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import entidades.Usuario;
 import openHelper.SQLite_OpenHelper;
 
 public class MainActivity extends AppCompatActivity {
@@ -66,6 +72,27 @@ public class MainActivity extends AppCompatActivity {
         boolean validLogin = conn.validarUsuario(username, password);
 
         if (validLogin) {
+            Usuario usuarioLogueado=conn.obtenerUsuario(username,password);
+
+
+            JSONObject us = new JSONObject();
+            try {
+                us.put("id", usuarioLogueado.getId());
+                us.put("nombre", usuarioLogueado.getNombre());
+                us.put("correo", usuarioLogueado.getCorreo());
+                us.put("contrasena", usuarioLogueado.getContrasena());
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+            // Guardar en SharedPreferences
+            SharedPreferences preferencias = getSharedPreferences("usuarioLogueado", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferencias.edit();
+            editor.putString("usuario", us.toString());
+            editor.apply();
+
             Toast.makeText(this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(MainActivity.this, PanelActivity.class);
             startActivity(intent);

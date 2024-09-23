@@ -2,6 +2,7 @@ package com.example.tp3_grupo2;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -60,6 +61,12 @@ public class PanelActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
         conn=new SQLite_OpenHelper(this,"BD_Tp3",null,1);
+
+        //PRUEBA DE QUE ANDA SHAREDPREFERENCES
+
+        SharedPreferences preferencias = getSharedPreferences("usuarioLogueado", MODE_PRIVATE);
+        String usuarioLogueado = preferencias.getString("usuario", "[]");
+
     }
 
     @Override
