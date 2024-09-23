@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.TextView;
 import android.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -31,6 +32,9 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.tp3_grupo2.databinding.ActivityPanelBinding;
 
+import java.util.ArrayList;
+
+import entidades.ItemAdapterParqueo;
 import entidades.Usuario;
 import openHelper.SQLite_OpenHelper;
 import entidades.Parqueo;
@@ -43,6 +47,7 @@ public class PanelActivity extends AppCompatActivity {
     Usuario usuarioLogueado;
     private View navHeaderPanel;
     private TextView userNameTextView, userEmailTextView;
+    GridView gridView_Parkeos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +111,22 @@ public class PanelActivity extends AppCompatActivity {
         // Setear el nombre y el correo en el panel lateral
         userNameTextView.setText(usuarioLogueado.getNombre());
         userEmailTextView.setText(usuarioLogueado.getCorreo());
+
+        gridView_Parkeos=(GridView) findViewById(R.id.parkeos);
+
+        ArrayList<Parqueo> parqueosList=conn.obtenerParqueosPorUsuario(usuarioLogueado);
+
+
+        /*for (Parqueo parqueo : parqueosList) {
+
+            System.out.println("ID: " + parqueo.getId() +
+                    ", Matricula: " + parqueo.getMatricula() +
+                    ", Tiempo: " + parqueo.getTiempo() +
+                    ", Usuario ID: " + parqueo.getUsuarioId());
+        }*/
+
+        ItemAdapterParqueo adapter = new ItemAdapterParqueo(this, parqueosList);
+        gridView_Parkeos.setAdapter(adapter);
     }
 
     @Override

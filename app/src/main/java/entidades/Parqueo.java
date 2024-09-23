@@ -48,4 +48,15 @@ public class Parqueo {
     public void setUsuarioId(int usuarioId) {
         this.usuarioId = usuarioId;
     }
+
+
+    @Override
+    public String toString() {
+        return "Parqueo{" +
+                "id=" + id +
+                ", matricula='" + matricula + '\'' +
+                ", tiempo=" + tiempo +
+                ", usuarioId=" + usuarioId +
+                '}';
+    }
 }

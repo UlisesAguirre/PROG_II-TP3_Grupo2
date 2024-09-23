@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+
+import entidades.Parqueo;
 import entidades.Usuario;
 
 public class SQLite_OpenHelper extends SQLiteOpenHelper {
@@ -88,10 +91,33 @@ public class SQLite_OpenHelper extends SQLiteOpenHelper {
         return db.rawQuery("SELECT * FROM Parqueos", null);
     }
 
-    public Cursor obtenerParqueosUsuario(String userId) {
+   /* public Cursor obtenerParqueosUsuario(String userId) {
         abrirLectura();  // Abrir en modo lectura
         SQLiteDatabase db = this.getReadableDatabase();  // Obtener base de datos de solo lectura
         String query = "SELECT Matricula, Tiempo FROM Parqueos WHERE UsuarioId = ?";
         return db.rawQuery(query, new String[]{userId});
+    }*/
+
+    public ArrayList<Parqueo> obtenerParqueosPorUsuario(Usuario usuarioLogueado){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT Id, Matricula, Tiempo, UsuarioId FROM Parqueos WHERE UsuarioId = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{Integer.toString(usuarioLogueado.getId())});
+
+        ArrayList<Parqueo> parqueos = new ArrayList<>();
+
+        while (cursor.moveToNext()){
+            int id = cursor.getInt(cursor.getColumnIndex("Id"));
+            String matricula = cursor.getString(cursor.getColumnIndex("Matricula"));
+            int tiempo = cursor.getInt(cursor.getColumnIndex("Tiempo"));
+            int usuarioId = cursor.getInt(cursor.getColumnIndex("UsuarioId"));
+
+            Parqueo parqueo = new Parqueo(id, matricula, tiempo, usuarioId);
+            parqueos.add(parqueo);
+        }
+
+        cursor.close();
+        db.close();
+        return parqueos;
+
     }
 }
