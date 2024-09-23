@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             Usuario usuarioLogueado=conn.obtenerUsuario(username,password);
 
 
-            JSONObject us = new JSONObject();
+            /*JSONObject us = new JSONObject();
             try {
                 us.put("id", usuarioLogueado.getId());
                 us.put("nombre", usuarioLogueado.getNombre());
@@ -84,13 +84,18 @@ public class MainActivity extends AppCompatActivity {
 
             } catch (JSONException e) {
                 e.printStackTrace();
-            }
+            }*/
+
+
 
 
             // Guardar en SharedPreferences
             SharedPreferences preferencias = getSharedPreferences("usuarioLogueado", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = preferencias.edit();
-            editor.putString("usuario", us.toString());
+            editor.putString("ID", (Integer.toString(usuarioLogueado.getId()) ));
+            editor.putString("Nombre", usuarioLogueado.getNombre());
+            editor.putString("Correo", usuarioLogueado.getCorreo());
+            editor.putString("Contrasena", usuarioLogueado.getContrasena());
             editor.apply();
 
             Toast.makeText(this, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show();
