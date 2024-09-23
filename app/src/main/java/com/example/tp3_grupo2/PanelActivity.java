@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -39,6 +40,8 @@ public class PanelActivity extends AppCompatActivity {
     private ActivityPanelBinding binding;
     SQLite_OpenHelper conn;
     Usuario usuarioLogueado;
+    private View navHeaderPanel;
+    private TextView userNameTextView, userEmailTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +77,14 @@ public class PanelActivity extends AppCompatActivity {
         usuarioLogueado.setCorreo(preferencias.getString("Correo", " "));
         usuarioLogueado.setContrasena(preferencias.getString("Contrasena", " "));
 
+        // referencia a los TextViews del panel lateral
+        navHeaderPanel = navigationView.getHeaderView(0);
+        userNameTextView = navHeaderPanel.findViewById(R.id.user_name);
+        userEmailTextView = navHeaderPanel.findViewById(R.id.user_email);
+
+        // setear el nombre y el correo en el panel lateral
+        userNameTextView.setText(usuarioLogueado.getNombre());
+        userEmailTextView.setText(usuarioLogueado.getCorreo());
     }
 
     @Override

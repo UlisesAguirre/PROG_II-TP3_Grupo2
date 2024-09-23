@@ -10,6 +10,7 @@
     <style name="Theme.TP3_GRUPO2.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:statusBarColor">@color/bar_up_color</item>
     </style>
 
     <style name="Theme.TP3_GRUPO2.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
