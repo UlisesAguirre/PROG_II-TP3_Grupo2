@@ -70,7 +70,7 @@ public class Registrarse extends AppCompatActivity {
 
         ContentValues valores=new ContentValues();
         valores.put("Nombre",us.getNombre());
-        valores.put("Correo",us.getNombre());
+        valores.put("Correo",us.getCorreo());
         valores.put("Contrasena",us.getContrasena());
 
         conn.getWritableDatabase().insert("Usuarios",null,valores);

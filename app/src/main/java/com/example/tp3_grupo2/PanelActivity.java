@@ -69,7 +69,7 @@ public class PanelActivity extends AppCompatActivity {
 
         SharedPreferences preferencias = getSharedPreferences("usuarioLogueado", MODE_PRIVATE);
         usuarioLogueado=new Usuario();
-        usuarioLogueado.setId(Integer.parseInt(preferencias.getString("Id", "0")));
+        usuarioLogueado.setId(Integer.parseInt(preferencias.getString("ID", "0")));
         usuarioLogueado.setNombre(preferencias.getString("Nombre", " "));
         usuarioLogueado.setCorreo(preferencias.getString("Correo", " "));
         usuarioLogueado.setContrasena(preferencias.getString("Contrasena", " "));

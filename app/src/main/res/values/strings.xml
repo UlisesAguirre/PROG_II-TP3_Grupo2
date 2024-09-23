@@ -22,6 +22,7 @@
     <string name="nav_header_desc">Nav</string>
     <string name="action_settings">Ajustes</string>
     <string name="perfil_header">Perfil</string>
+    <string name="logout">Cerrar Sesión</string>
 
 
     <string name="menu_home">Parking control</string>

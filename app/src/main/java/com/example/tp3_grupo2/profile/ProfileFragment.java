@@ -26,10 +26,18 @@ public class ProfileFragment extends Fragment {
         final TextView textEmail = root.findViewById(R.id.text_email);
         final TextView textPassword = root.findViewById(R.id.text_password);
 
-        // Observa los datos del ViewModel
-        profileViewModel.getUserName().observe(getViewLifecycleOwner(), textName::setText);
-        profileViewModel.getUserEmail().observe(getViewLifecycleOwner(), textEmail::setText);
-        profileViewModel.getUserPassword().observe(getViewLifecycleOwner(), textPassword::setText);
+        // Observa los datos del ViewModel y formatea el texto
+        profileViewModel.getUserName().observe(getViewLifecycleOwner(), nombre -> {
+            textName.setText("Nombre: " + nombre);
+        });
+
+        profileViewModel.getUserEmail().observe(getViewLifecycleOwner(), email -> {
+            textEmail.setText("Email: " + email);
+        });
+
+        profileViewModel.getUserPassword().observe(getViewLifecycleOwner(), password -> {
+            textPassword.setText("Contraseña: " + password);
+        });
 
         return root;
     }
