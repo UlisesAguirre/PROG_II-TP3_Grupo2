@@ -176,14 +176,26 @@ public class PanelActivity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (plateNumberInput.getText().toString().isEmpty() || timeInput.getText().toString().isEmpty()) {
+                String plateNumber = plateNumberInput.getText().toString();
+                String timeInputText = timeInput.getText().toString();
+
+                // Validar que la matrícula solo contenga letras y números
+                if (plateNumber.isEmpty() || timeInputText.isEmpty()) {
                     Snackbar.make(v, "Por favor complete todos los campos", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null)
+                            .show();
+                } else if (!plateNumber.matches("[a-zA-Z0-9]+")) {
+                    Snackbar.make(v, "La matrícula solo puede contener letras y números", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null)
+                            .show();
+                } else if (!timeInputText.matches("\\d+")) {
+                    Snackbar.make(v, "El tiempo debe ser un número", Snackbar.LENGTH_LONG)
                             .setAction("Action", null)
                             .show();
                 } else {
                     Parqueo pr = new Parqueo();
-                    pr.setMatricula(plateNumberInput.getText().toString());
-                    pr.setTiempo(Integer.parseInt(timeInput.getText().toString()));
+                    pr.setMatricula(plateNumber);
+                    pr.setTiempo(Integer.parseInt(timeInputText));
                     pr.setUsuarioId(Integer.parseInt(usuario));
 
                     ContentValues valores = new ContentValues();
@@ -222,14 +234,14 @@ public class PanelActivity extends AppCompatActivity {
                             .show();
                     alertDialog.dismiss();
                 }
-                ArrayList<Parqueo> parqueosListActual=conn.obtenerParqueosPorUsuario(usuarioLogueado);
+                ArrayList<Parqueo> parqueosListActual = conn.obtenerParqueosPorUsuario(usuarioLogueado);
                 NavController navController3 = Navigation.findNavController(PanelActivity.this, R.id.nav_host_fragment_content_panel);
 
                 bundle.putSerializable("parqueos", parqueosListActual);
                 navController3.navigate(R.id.nav_home, bundle);
             }
-
         });
+
 
         alertDialog.show();
     }
